@@ -254,7 +254,7 @@ const SavedCampaigns = () => {
   const handleDeleteCampaign = async (campaignId) => {
     if (window.confirm('Are you sure you want to delete this campaign?')) {
       try {
-        await axios.delete(`https://socialsyncbackend-qe4w.onrender.com/api/campaign-schedules/delete-campaign/${campaignId}`);
+        await axios.delete(`https://socialsyncbackend-qe4w.onrender.com/api/delete-campaign/${campaignId}`);
         setCampaigns(campaigns.filter(c => c._id !== campaignId));
         toast.success('Campaign deleted successfully!', {
           position: "top-right",
