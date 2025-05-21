@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import { FaInstagram, FaFacebook, FaLinkedin, FaPlus, FaTrash, FaSpinner } from "react-icons/fa";
-import axios from "axios";
+// import axios from "axios";
+import api from "../utils/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,9 +17,8 @@ const Accounts = () => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await axios.get("/api/accounts?user_id=current_user_id");
-        // Ensure we always have an array to map over
-        setAccounts(response.data?.accounts || []);
+   const response = await api.get("/api/accounts?user_id=current_user_id");
+    setAccounts(response.data?.accounts || []);
       } catch (error) {
         console.error("Error fetching accounts:", error);
         setError("Failed to load accounts");
@@ -38,9 +38,9 @@ const Accounts = () => {
       setDisconnecting(true);
       const toastId = toast.loading("Disconnecting account...");
 
-      await axios.delete(`/api/accounts/${accountId}`, {
-        data: { user_id: "current_user_id" }
-      });
+    await api.delete(`/api/accounts/${accountId}`, {
+      data: { user_id: "current_user_id" }
+    });
 
       setAccounts(accounts.filter(account =>
         account._id !== accountId && account.account_id !== accountId
