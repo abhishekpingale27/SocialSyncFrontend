@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FiMail, FiLoader, FiArrowLeft } from "react-icons/fi";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/auth";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://socialsyncbackend-qe4w.onrender.com/api/auth";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
