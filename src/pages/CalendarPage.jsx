@@ -29,7 +29,7 @@ moment.tz.setDefault("Asia/Kolkata");
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const localizer = momentLocalizer(moment);
-const API_URL = "http://127.0.0.1:8000/api/scheduled-posts";
+const API_URL = "https://socialsyncbackend-qe4w.onrender.com/api/scheduled-posts";
 
 const CalendarPage = () => {
   const location = useLocation();
@@ -96,9 +96,9 @@ const CalendarPage = () => {
         setIsLoading(true);
         const [eventsRes, statsRes, teamRes, accountsRes] = await Promise.all([
           axios.get(API_URL),
-          axios.get("http://127.0.0.1:8000/api/scheduled-posts-stats/"),
-          axios.get("http://127.0.0.1:8000/api/team-members"),
-          axios.get("http://127.0.0.1:8000/api/accounts/?user_id=current_user_id")
+          axios.get("https://socialsyncbackend-qe4w.onrender.com/api/scheduled-posts-stats/"),
+          axios.get("https://socialsyncbackend-qe4w.onrender.com/api/team-members"),
+          axios.get("https://socialsyncbackend-qe4w.onrender.com/api/accounts/?user_id=current_user_id")
         ]);
 
         // Process events - Convert UTC to IST
@@ -218,7 +218,7 @@ const CalendarPage = () => {
       const scheduledUTC = moment.tz(scheduledDateTime, "Asia/Kolkata").utc().format();
 
       // Use the new schedule-post endpoint
-      const response = await axios.post("http://127.0.0.1:8000/api/schedule-post/", {
+      const response = await axios.post("https://socialsyncbackend-qe4w.onrender.com/api/schedule-post/", {
         caption,
         image_url: is_carousel ? image_url : image_url,
         platform,
