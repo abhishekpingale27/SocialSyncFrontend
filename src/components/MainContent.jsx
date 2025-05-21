@@ -19,7 +19,7 @@ const MainContent = () => {
   setLoading(true); // Show loading animation
 
   try {
-const response = await fetch("http://127.0.0.1:8000/api/chatbot/", {  // Ensure "/" at end
+const response = await fetch("https://socialsyncbackend-qe4w.onrender.com/api/chatbot/", {  // Ensure "/" at end
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ query: messageText }),
