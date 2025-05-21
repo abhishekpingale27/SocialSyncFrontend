@@ -446,7 +446,7 @@ useEffect(() => {
     const loadCampaign = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/get-campaign/${campaignId}`);
+        const response = await axios.get(`https://socialsyncbackend-qe4w.onrender.com/api/get-campaign/${campaignId}`);
 
         if (response.data) {
           const loadedCampaign = response.data;
@@ -617,7 +617,7 @@ const handleSaveSchedule = async () => {
       endDate: campaignData?.endDate || '',
     };
 
-    const response = await axios.post('http://localhost:8000/api/save-campaign/', payload, {
+    const response = await axios.post('https://socialsyncbackend-qe4w.onrender.com/api/save-campaign/', payload, {
       headers: {
         'Content-Type': 'application/json'
       }
