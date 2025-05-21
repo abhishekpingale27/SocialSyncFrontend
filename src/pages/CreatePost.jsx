@@ -254,7 +254,7 @@ const generateCarouselImages = async () => {
     const generatedItems = await Promise.all(
       themes.map(async (theme, index) => {
         const imageRes = await axios.post(
-          "http://127.0.0.1:8000/api/generate-image/",
+          "https://socialsyncbackend-qe4w.onrender.com/api/generate-image/",
           { prompt: theme },
           {
             responseType: "blob",
@@ -539,7 +539,7 @@ const PreviewModal = ({ onClose, content, platform, isCarousel }) => {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/get-campaigns");
+        const response = await axios.get("https://socialsyncbackend-qe4w.onrender.com/api/get-campaigns");
         setCampaigns(response.data);
       } catch (error) {
         console.error("Error fetching campaigns:", error);
@@ -558,7 +558,7 @@ const PreviewModal = ({ onClose, content, platform, isCarousel }) => {
       const fetchCampaignPosts = async () => {
         try {
           const response = await axios.get(
-            `http://127.0.0.1:8000/api/get-campaign/${selectedCampaign._id}`
+            `https://socialsyncbackend-qe4w.onrender.com/api/get-campaign/${selectedCampaign._id}`
           );
           setCampaignPosts(response.data.posts || []);
         } catch (error) {
@@ -595,7 +595,7 @@ const PreviewModal = ({ onClose, content, platform, isCarousel }) => {
     try {
       // Generate caption first
       const captionRes = await axios.post(
-        "http://127.0.0.1:8000/api/generate-caption/",
+        "https://socialsyncbackend-qe4w.onrender.com/api/generate-caption/",
         {
           prompt: prompt,
           platform: selectedPlatform.toLowerCase(),
@@ -624,7 +624,7 @@ const PreviewModal = ({ onClose, content, platform, isCarousel }) => {
         });
 
         const imageRes = await axios.post(
-          "http://127.0.0.1:8000/api/generate-image/",
+          "https://socialsyncbackend-qe4w.onrender.com/api/generate-image/",
           { prompt: prompt },
           { responseType: "blob" }
         );
@@ -671,7 +671,7 @@ const PreviewModal = ({ onClose, content, platform, isCarousel }) => {
 
     try {
       const imageRes = await axios.post(
-        "http://127.0.0.1:8000/api/generate-image/",
+        "https://socialsyncbackend-qe4w.onrender.com/api/generate-image/",
         { prompt: prompt },
         {
           responseType: "blob",
@@ -1164,7 +1164,7 @@ const handleSaveDraft = async () => {
       created_at: new Date().toISOString(),
     };
 
-    const response = await axios.post("http://127.0.0.1:8000/api/drafts/", draftData);
+    const response = await axios.post("https://socialsyncbackend-qe4w.onrender.com/api/drafts/", draftData);
 
     toast.update(toastId, {
       render: "Draft saved successfully!",
