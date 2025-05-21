@@ -29,7 +29,7 @@ const DraftsPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/get-drafts/?page=${page}&limit=${limit}`
+          `https://socialsyncbackend-qe4w.onrender.com/api/get-drafts/?page=${page}&limit=${limit}`
         );
         if (response.data.status === "success") {
           setDrafts(response.data.data);
@@ -64,7 +64,7 @@ const DraftsPage = () => {
       position: "top-center",
     });
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/delete-draft/${draftId}`);
+      const response = await axios.delete(`https://socialsyncbackend-qe4w.onrender.com/api/delete-draft/${draftId}`);
       if (response.data.status === "success") {
         setDrafts(drafts.filter((draft) => draft._id !== draftId));
         toast.update(toastId, {
