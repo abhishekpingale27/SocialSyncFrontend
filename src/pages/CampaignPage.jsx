@@ -416,7 +416,8 @@ import { FiDownload, FiCheck, FiX, FiEdit2, FiSave, FiShare2, FiCalendar, FiCopy
 import { FaRegLightbulb, FaRegClock, FaRegStickyNote, FaRegHandPointer } from 'react-icons/fa';
 import { RiMagicLine } from 'react-icons/ri';
 import { jsPDF } from 'jspdf';
-import axios from 'axios';
+// import axios from 'axios';
+import api from "../utils/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -446,7 +447,7 @@ useEffect(() => {
     const loadCampaign = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://socialsyncbackend-qe4w.onrender.com/api/get-campaign/${campaignId}`);
+        const response = await api.get(`https://socialsyncbackend-qe4w.onrender.com/api/get-campaign/${campaignId}`);
 
         if (response.data) {
           const loadedCampaign = response.data;
@@ -617,7 +618,7 @@ const handleSaveSchedule = async () => {
       endDate: campaignData?.endDate || '',
     };
 
-    const response = await axios.post('https://socialsyncbackend-qe4w.onrender.com/api/save-campaign/', payload, {
+    const response = await api.post('https://socialsyncbackend-qe4w.onrender.com/api/save-campaign/', payload, {
       headers: {
         'Content-Type': 'application/json'
       }
