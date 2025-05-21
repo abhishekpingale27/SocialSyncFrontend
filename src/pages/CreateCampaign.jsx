@@ -299,7 +299,7 @@ export default function CreateCampaign() {
         });
       }, 300);
 
-      const response = await fetch('http://127.0.0.1:8000/api/plan-campaign/', {
+      const response = await fetch('https://socialsyncbackend-qe4w.onrender.com/api/plan-campaign/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
