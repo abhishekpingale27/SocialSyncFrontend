@@ -15,7 +15,8 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+// import axios from "axios";
+import api from "../utils/api";
 
 const SocialDashboard = () => {
   const [linkedInAuthUrl, setLinkedInAuthUrl] = useState("");
@@ -53,7 +54,8 @@ const SocialDashboard = () => {
     const maxRetries = 3;
     try {
       console.log("Fetching LinkedIn auth URL...");
-      const authUrlResponse = await axios.get("/api/linkedin/auth-url");
+      // const authUrlResponse = await axios.get("/api/linkedin/auth-url");
+      const authUrlResponse = await api.get("/api/linkedin/auth-url");
       console.log("Auth URL response:", authUrlResponse.data);
 
       if (!authUrlResponse.data.authUrl) {
@@ -118,8 +120,8 @@ const SocialDashboard = () => {
 
   const fetchConnectedAccounts = async () => {
     try {
-      const response = await axios.get("/api/accounts?user_id=current_user_id");
-      setConnectedAccounts(response.data?.accounts || []);
+    const response = await api.get("/api/accounts?user_id=current_user_id");
+    setConnectedAccounts(response.data?.accounts || []);
     } catch (error) {
       console.error("Error fetching connected accounts:", error);
       setError("Failed to load connected accounts");
@@ -130,18 +132,18 @@ const SocialDashboard = () => {
     if (disconnecting) return;
 
     try {
-      setDisconnecting(true);
-      await axios.delete(`/api/accounts/${accountId}`, {
-        data: { user_id: "current_user_id" },
-      });
-      setSuccessMessage("Account disconnected successfully");
-      setTimeout(() => setSuccessMessage(""), 5000);
-      await fetchConnectedAccounts();
-    } catch (error) {
-      console.error("Error disconnecting account:", error);
-      setError("Failed to disconnect account");
-    } finally {
-      setDisconnecting(false);
+     setDisconnecting(true);
+    await api.delete(`/api/accounts/${accountId}`, {
+      data: { user_id: "current_user_id" },
+    });
+    setSuccessMessage("Account disconnected successfully");
+    setTimeout(() => setSuccessMessage(""), 5000);
+    await fetchConnectedAccounts();
+  } catch (error) {
+    console.error("Error disconnecting account:", error);
+    setError("Failed to disconnect account");
+  } finally {
+    setDisconnecting(false);
     }
   };
 
