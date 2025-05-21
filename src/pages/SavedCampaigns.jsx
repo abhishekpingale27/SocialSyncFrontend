@@ -190,7 +190,7 @@ const SavedCampaigns = () => {
     const fetchCampaigns = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:8000/api/get-campaigns');
+        const response = await axios.get('https://socialsyncbackend-qe4w.onrender.com/api/get-campaigns');
         setCampaigns(response.data);
       } catch (err) {
         setError('Failed to load campaigns. Please try again.');
@@ -220,7 +220,7 @@ const SavedCampaigns = () => {
     setGenerating(campaignId);
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/campaign-schedules/generate-content/${campaignId}`
+        `https://socialsyncbackend-qe4w.onrender.com/api/campaign-schedules/generate-content/${campaignId}`
       );
 
       toast.success(response.data.message || 'Content generated successfully!', {
@@ -234,7 +234,7 @@ const SavedCampaigns = () => {
       });
 
       // Refresh campaigns list
-      const updatedResponse = await axios.get('http://localhost:8000/api/get-campaigns');
+      const updatedResponse = await axios.get('https://socialsyncbackend-qe4w.onrender.com/api/get-campaigns');
       setCampaigns(updatedResponse.data);
     } catch (error) {
       toast.error(`Error generating content: ${error.response?.data?.detail || error.message}`, {
@@ -254,7 +254,7 @@ const SavedCampaigns = () => {
   const handleDeleteCampaign = async (campaignId) => {
     if (window.confirm('Are you sure you want to delete this campaign?')) {
       try {
-        await axios.delete(`http://localhost:8000/api/campaign-schedules/delete-campaign/${campaignId}`);
+        await axios.delete(`https://socialsyncbackend-qe4w.onrender.com/api/campaign-schedules/delete-campaign/${campaignId}`);
         setCampaigns(campaigns.filter(c => c._id !== campaignId));
         toast.success('Campaign deleted successfully!', {
           position: "top-right",
