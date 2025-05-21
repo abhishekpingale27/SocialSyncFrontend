@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://socialsyncbackend-qe4w.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://socialsyncbackend-qe4w.onrender.com",
 });
 
 // Add request interceptor to include JWT
