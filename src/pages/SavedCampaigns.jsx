@@ -27,33 +27,6 @@
 //   };
 //
 //   fetchCampaigns();
-// }, []);
-//
-//   const handleViewCampaign = (campaignId) => {
-//     navigate(`/campaign/${campaignId}`);
-//   };
-//
-//   const handleGenerateContent = async (campaignId) => {
-//     setGenerating(campaignId);
-//     try {
-//       const response = await axios.post(
-//         `http://localhost:8000/api/campaign-schedules/generate-content/${campaignId}`
-//       );
-//
-//       alert(response.data.message);
-//       // Refresh campaigns list
-//       const updatedResponse = await axios.get('http://localhost:8000/api/campaign-schedules/get-campaigns/');
-//       setCampaigns(updatedResponse.data);
-//     } catch (error) {
-//       alert(`Error generating content: ${error.response?.data?.detail || error.message}`);
-//     } finally {
-//       setGenerating(null);
-//     }
-//   };
-//
-//   const formatDate = (dateString) => {
-//     if (!dateString) return '';
-//     const options = { year: 'numeric', month: 'short', day: 'numeric' };
 //     return new Date(dateString).toLocaleDateString(undefined, options);
 //   };
 //
@@ -111,52 +84,6 @@
 //                         <span className="mr-4">
 //                           {campaign.posts?.length || 0} posts
 //                         </span>
-//                         <span>
-//                           {formatDate(campaign.start_date)} - {formatDate(campaign.end_date)}
-//                         </span>
-//                       </div>
-//
-//                       <div className="flex space-x-2">
-//                         <button
-//                           onClick={() => handleViewCampaign(campaign._id)}
-//                           className="flex items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
-//                           title="View Campaign"
-//                         >
-//                           <FiEye className="text-lg" />
-//                         </button>
-//
-//                         <button
-//                           onClick={() => handleGenerateContent(campaign._id)}
-//                           disabled={generating === campaign._id}
-//                           className={`flex items-center justify-center p-2 ${
-//                             generating === campaign._id ?
-//                             'bg-gray-100 text-gray-400 cursor-not-allowed' :
-//                             'bg-green-100 text-green-600 hover:bg-green-200'
-//                           } rounded-lg transition-colors`}
-//                           title="Generate Content"
-//                         >
-//                           <FiPlay className="text-lg" />
-//                         </button>
-//
-//                         <button
-//                           className="flex items-center justify-center p-2 bg-yellow-100 text-yellow-600 rounded-lg hover:bg-yellow-200 transition-colors"
-//                           title="Edit Campaign"
-//                         >
-//                           <FiEdit className="text-lg" />
-//                         </button>
-//
-//                         <button
-//                           className="flex items-center justify-center p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
-//                           title="Delete Campaign"
-//                         >
-//                           <FiTrash2 className="text-lg" />
-//                         </button>
-//                       </div>
-//                     </div>
-//                   </div>
-//                 ))}
-//               </div>
-//             )}
 //           </div>
 //         </main>
 //       </div>
@@ -276,6 +203,31 @@ const SavedCampaigns = () => {
           progress: undefined,
         });
       }
+    }
+  };
+
+  const handleEditCampaign = (campaign) => {
+    try {
+      // Redirect to CreatePost with campaign data
+      navigate('/create-post', {
+        state: {
+          campaignData: campaign,
+          isCampaign: true,
+          action: 'edit'
+        }
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to redirect to post creation', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
