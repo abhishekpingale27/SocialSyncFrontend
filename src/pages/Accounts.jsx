@@ -13,6 +13,8 @@ const Accounts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [disconnecting, setDisconnecting] = useState(false);
+  const [linkedinAccounts, setLinkedinAccounts] = useState([]);
+  const [defaultAccount, setDefaultAccount] = useState(null);
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -30,6 +32,16 @@ const Accounts = () => {
 
     fetchAccounts();
   }, []);
+
+  const fetchLinkedInAccounts = async () => {
+    try {
+      const response = await api.get("/api/linkedin/accounts");
+      setLinkedinAccounts(response.data);
+      setDefaultAccount(response.data.find(acc => acc.is_default));} catch (error) {
+    // Handle error
+  }
+};
+
 
   const handleDisconnect = async (accountId) => {
     if (disconnecting) return;
