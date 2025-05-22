@@ -41,7 +41,7 @@
 //     try {
 //       setLoading(true);
 //
-//       const response = await fetch(`${import.meta.env.VITE_API_URL}/plan-campaign/`, {
+//       const response = await fetch('http://127.0.0.1:8000/api/plan-campaign/', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -49,17 +49,18 @@
 //         body: JSON.stringify(formData),
 //       });
 //
+//       if (!response.ok) throw new Error(`Server responded with status: ${response.status}`);
 //       const data = await response.json();
 //
-//       if (response.ok) {
-//         setSuccess('Campaign created successfully!');
-//         navigate('/campaign');
+//       if (data && data.content) {
+//         setSuccess('Campaign generated successfully!');
+//         navigate('/campaign', { state: { campaignData: data.content } });
 //       } else {
-//         setError(data.error || 'Failed to create campaign');
+//         throw new Error('Invalid response structure.');
 //       }
-//     } catch (error) {
-//       setError('Failed to create campaign. Please try again.');
-//       console.error('Error:', error);
+//     } catch (err) {
+//       console.error(err);
+//       setError('Error generating campaign. Please try again.');
 //     } finally {
 //       setLoading(false);
 //     }
