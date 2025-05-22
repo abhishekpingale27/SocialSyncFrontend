@@ -37,6 +37,7 @@ import Navbar from "../components/Navbar";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import.meta.env.VITE_API_URL
 
 const validatePlatform = (platform) => {
   const validPlatforms = ['instagram', 'facebook', 'twitter', 'linkedin'];
@@ -1113,7 +1114,7 @@ const handleSaveDraft = async () => {
     const platform = validatePlatform(selectedPlatform);
 
     const response = await axios.post(
-      "https://socialsyncbackend-qe4w.onrender.com/api/drafts/save-draft/",
+      `${import.meta.env.VITE_API_URL}/drafts/save-draft/`,
       {
         caption,
         platform: selectedPlatform.toLowerCase(),

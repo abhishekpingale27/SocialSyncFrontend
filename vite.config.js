@@ -1,19 +1,11 @@
-//import { defineConfig } from 'vite'
-//import react from '@vitejs/plugin-react'
-//import tailwindcss from '@tailwindcss/vite'
-//// https://vite.dev/config/
-//export default defineConfig({
-//  plugins: [tailwindcss(), react()],
-//})
-
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from 'tailwindcss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
-  base: './',
+  plugins: [react()],
+  base: '/',
   server: {
     proxy: {
       '/api': {
@@ -26,6 +18,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
   }
 })
