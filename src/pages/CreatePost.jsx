@@ -1072,26 +1072,15 @@ const handleSchedulePost = async () => {
 };
 
 const handleSaveDraft = async () => {
-  if (!caption.trim()) {
-    toast.warn("Please add a caption before saving draft", {
-      position: "top-center",
-      autoClose: 3000,
-    });
-    return;
-  }
-
   if (isCarousel && carouselItems.length === 0) {
     toast.warn("At least one image is required for carousel draft.", {
       position: "top-center",
-      autoClose: 3000,
     });
     return;
   }
-
   if (!isCarousel && !uploadedImage) {
     toast.warn("Image is required for draft.", {
       position: "top-center",
-      autoClose: 3000,
     });
     return;
   }
@@ -1102,49 +1091,107 @@ const handleSaveDraft = async () => {
   });
 
   try {
-    // Prepare image URLs
-    const imageUrls = isCarousel ? carouselItems.map(item => item.image) : [uploadedImage];
-
-    if (!imageUrls.some(url => url)) {
-      throw new Error("No valid images to save as draft");
-    }
-
     // Validate platform
     const platform = validatePlatform(selectedPlatform);
 
-    const response = await axios.post(
-      "https://socialsyncbackend-qe4w.onrender.com/api/drafts/save-draft/",
-      {
-        caption,
-        platform: selectedPlatform.toLowerCase(),
-        image_url: isCarousel ? imageUrls : imageUrls[0],
-        prompt,
-        is_carousel: isCarousel
-      }
-    );
+    // Prepare image URLs (optionally upload to Cloudinary)
+    let imageUrls = [];
 
-    if (response.data.status === "success") {
-      toast.update(toastId, {
-        render: "Draft saved successfully!",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000,
-      });
+    if (isCarousel) {
+      for (const item of carouselItems) {
+        if (item.image && item.image.startsWith("blob:")) {
+          // Option 1: Upload to Cloudinary
+          const response = await fetch(item.image);
+          const blob = await response.blob();
+          const file = new File([blob], `carousel-draft-${Date.now()}.jpg`, {
+            type: blob.type,
+          });
+
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "gtwsrzhq");
+
+          const cloudinaryResponse = await axios.post(
+            "https://api.cloudinary.com/v1_1/dgk4su3ne/image/upload",
+            formData,
+            { timeout: 30000 }
+          );
+          imageUrls.push(cloudinaryResponse.data.secure_url);
+
+          // Option 2: Keep blob URLs (uncomment to use)
+          // imageUrls.push(item.image);
+        } else if (item.image) {
+          imageUrls.push(item.image); // Already a Cloudinary URL
+        }
+      }
     } else {
-      throw new Error(response.data.message || "Failed to save draft");
+      if (uploadedImage.startsWith("blob:")) {
+        // Option 1: Upload to Cloudinary
+        const response = await fetch(uploadedImage);
+        const blob = await response.blob();
+        const file = new File([blob], `draft-${Date.now()}.jpg`, {
+          type: blob.type,
+        });
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "gtwsrzhq");
+
+        const cloudinaryResponse = await axios.post(
+          "https://api.cloudinary.com/v1_1/dgk4su3ne/image/upload",
+          formData,
+          { timeout: 30000 }
+        );
+        imageUrls.push(cloudinaryResponse.data.secure_url);
+
+        // Option 2: Keep blob URLs (uncomment to use)
+        // imageUrls.push(uploadedImage);
+      } else if (uploadedImage) {
+        imageUrls.push(uploadedImage); // Already a Cloudinary URL
+      }
     }
+
+    if (imageUrls.length === 0) {
+      throw new Error("No valid images to save as draft");
+    }
+
+    // Save draft to backend
+    const draftData = {
+      caption: caption.trim() || "Untitled Draft",
+      image_url: isCarousel ? imageUrls : imageUrls[0],
+      platform: platform.toLowerCase(),
+      is_carousel: isCarousel,
+      created_at: new Date().toISOString(),
+    };
+
+    const response = await axios.post("https://socialsyncbackend-qe4w.onrender.com/api/drafts/", draftData);
+
+    toast.update(toastId, {
+      render: "Draft saved successfully!",
+      type: "success",
+      isLoading: false,
+      autoClose: 3000,
+    });
+
+    // Optionally reset form or navigate
+    setCaption("");
+    setUploadedImage(null);
+    setCarouselItems([]);
+    setIsCarousel(false);
+    navigate("/drafts"); // Navigate to drafts page if exists
   } catch (error) {
     console.error("Error saving draft:", error);
     toast.update(toastId, {
-      render: error.response?.data?.message || "Failed to save draft. Please try again.",
+      render: "Failed to save draft. Please try again.",
       type: "error",
       isLoading: false,
-      autoClose: 3000,
+      autoClose: 5000,
     });
   } finally {
     setLoading(false);
   }
 };
+
 
 const handleUsePost = (post) => {
   try {
